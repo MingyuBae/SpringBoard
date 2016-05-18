@@ -11,4 +11,5 @@
 	<div class="col-xs-12">
 		${postData.content }
 	</div>
+	${commentList }
 </div>

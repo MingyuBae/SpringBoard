@@ -1,10 +1,14 @@
 package com.asuscomm.ktbk.board.domain.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Post {
@@ -17,6 +21,17 @@ public class Post {
 	Date regDate;
 	String content;
 	Boolean deleted;
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	List<Comment> commentList;
+	
+	public Post(){
+		
+	}
+	
+	public Post(Integer boardId){
+		this.boardId = boardId;
+	}
+	
 	
 	public Integer getBoardId() {
 		return boardId;
@@ -59,5 +74,18 @@ public class Post {
 	}
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+	public List<Comment> getCommentList() {
+		return commentList;
+	}
+	public void setCommentList(List<Comment> commentList) {
+		this.commentList = commentList;
+	}
+	
+	@Override
+	public String toString() {
+		return "Post [boardId=" + boardId + ", userId=" + userId + ", title=" + title + ", category=" + category
+				+ ", regDate=" + regDate + ", content=" + content + ", deleted=" + deleted + ", commentList="
+				+ commentList + "]";
 	}
 }

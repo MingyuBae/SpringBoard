@@ -1,5 +1,6 @@
 package com.asuscomm.ktbk.board.presentation.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asuscomm.ktbk.board.domain.model.Comment;
 import com.asuscomm.ktbk.board.domain.model.Post;
+import com.asuscomm.ktbk.board.domain.service.BoardService;
 import com.asuscomm.ktbk.board.infrastructure.dao.CommentDao;
 import com.asuscomm.ktbk.board.infrastructure.dao.PostDao;
 
@@ -19,6 +21,8 @@ import com.asuscomm.ktbk.board.infrastructure.dao.PostDao;
 public class BoardController {
 	@Autowired
 	PostDao postDao;
+	@Autowired
+	BoardService boardService;
 	@Autowired
 	CommentDao commentDao;
 	
@@ -47,15 +51,17 @@ public class BoardController {
 	
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(Post postData){
-		postData = postDao.save(postData);
+		postData = boardService.writePost(postData);
+		
 		return "redirect:/post/" + postData.getBoardId();
 	}
 	
-	@RequestMapping(value="/post/{pageNo}/comment/write")//, method=RequestMethod.POST)
-	public @ResponseBody Comment commentWrite(Comment commentData, @PathVariable("pageNo") Integer pageNo){
-		Post temp = postDao.getOne(pageNo);
+	@RequestMapping(value="/post/{boardId}/comment/write")//, method=RequestMethod.POST)
+	public @ResponseBody Comment commentWrite(Comment commentData, @PathVariable("boardId") Integer boardId){
+		Post temp = postDao.getOne(boardId);
 		
 		commentData.setPost(temp);
+		commentData.setRegDate(new Date());
 		commentData = commentDao.save(commentData);
 		return commentData;
 	}

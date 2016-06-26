@@ -18,7 +18,7 @@
 			  <li class="list-group-item">${eachComment.content}</li>
 		  </c:forEach>
 		</ul>
-		<form action="${cp }/post/${postData.boardId}/comment/write" method="post">
+		<form id="commentForm" action="${cp }/post/${postData.boardId}/comment/write" method="post">
 			<div class="input-group">
 				<span class="input-group-addon" id="user-name">사용자 이름</span>
 				<input type="text" name="content" class="form-control" placeholder="댓글"/>
@@ -29,3 +29,26 @@
 		</form>
 	</div>
 </div>
+
+<script>
+	$('#commentForm').submit(function (event){
+		$.ajax({
+			url: $(this).attr('action'),
+			data: $(this).serialize(),
+			method: $(this).attr('method'),
+			success: function (data){
+				if(data != null && data.commentId >= 0){
+					alert("댓글이 성공적으로 작성됬습니다.");
+					location.reload();
+				} else {
+					alert("댓글 작성중 오류가 발생하였습니다!");
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown){
+				alert('오류가 발생했습니다\n(' + textStatus + ')');
+			}
+		});
+		
+		event.preventDefault();
+	});
+</script>

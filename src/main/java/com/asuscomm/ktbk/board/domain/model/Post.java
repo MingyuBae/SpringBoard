@@ -10,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 @Entity
+@JsonAutoDetect
 public class Post {
 	@Id
 	@GeneratedValue

@@ -1,6 +1,5 @@
 package com.asuscomm.ktbk.board.presentation.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class BoardController {
 	
 	@RequestMapping("/")
 	public String index(Model model, String text){
-		List<Post> postList = postDao.findAll();
+		List<Post> postList = postDao.findByDeletedOrderByBoardId(false);
 		model.addAttribute("postList", postList);
 		return "list";
 	}
@@ -56,18 +55,16 @@ public class BoardController {
 		return "redirect:/post/" + postData.getBoardId();
 	}
 	
-	@RequestMapping(value="/post/{boardId}/comment/write")//, method=RequestMethod.POST)
+	@RequestMapping(value="/post/{boardId}/comment/write", method=RequestMethod.POST)
 	public @ResponseBody Comment commentWrite(Comment commentData, @PathVariable("boardId") Integer boardId){
-		Post temp = postDao.getOne(boardId);
+		commentData = boardService.writeComment(commentData, boardId);
 		
-		commentData.setPost(temp);
-		commentData.setRegDate(new Date());
-		commentData = commentDao.save(commentData);
 		return commentData;
 	}
-//	@RequestMapping(value="/post/{pageNo}/comment")
-//	public String commentListView(@PathVariable("pageNo") Integer pageNo, Model model){
-//		List<Comment> commentList = commentDao.findAllByBoardId(pageNo);
-//		return ""
+	
+//	@RequestMapping(value="/post/{BoardId}/comment")
+//	public @ResponseBody List<Comment> commentListView(@PathVariable("BoardId") Integer BoardId, Model model){
+//		List<Comment> commentList = commentDao.findAllByBoardId(BoardId);
+//		return commentList;
 //	}
 }

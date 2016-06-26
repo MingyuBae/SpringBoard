@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Comment {
 	@Id
@@ -17,12 +19,12 @@ public class Comment {
 	Integer commentId;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "boardId")
+	@JsonIgnore
 	Post post;
 	String content;
 	String writeUserid;
 	Date regDate;
 	Boolean deleted;
-	
 	public Integer getCommentId() {
 		return commentId;
 	}
